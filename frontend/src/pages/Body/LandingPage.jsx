@@ -62,7 +62,7 @@ const fadeIn = {
       <>
         {/* Hero Section */}
         <section className="pt-10 pb-20 px-6">
-          <div className="container mx-auto text-center" >
+          <div className="container mx-auto text-center">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -70,7 +70,6 @@ const fadeIn = {
               transition={{ duration: 0.6 }}
               className="max-w-3xl mx-auto"
             >
-             
               <h1 className={`text-5xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Detect Misinformation with AI-Powered Precision
               </h1>
