@@ -4,11 +4,6 @@ import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
   {
-    enrollment: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     name: {
       type: String,
       required: true,
@@ -31,11 +26,6 @@ const userSchema = new mongoose.Schema(
     refreshToken: {
       type: String,
       // required: true, -> Of course, it should not be a required field.
-    },
-    isAdmin: {
-      type: Boolean,
-      required: true,
-      default: false,
     },
   },
   { timestamps: true }

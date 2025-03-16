@@ -4,11 +4,11 @@ import uploadOntoCloudinary from "../utils/cloudinary.config.js";
 
 const registerUser = async (req, res) => {
   // data lo pehle from req
-  const { name, enrollment, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   // Pro way to check if any one of the fields is empty or not. If anyone is also empty, throw error!
   if (
-    [name, enrollment, email, password].some(
+    [name, email, password].some(
       (field) =>
         field?.trim() === "" ||
         field?.trim() === null ||
@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
 
   // first of all see if any "user" with that "email" is already present or not!
   const alreadyExistingUserWithThatEmail = await User.findOne({
-    $or: [{ email }, { enrollment }],
+    $or: [{ email }, { name }],
   });
 
   // console.log(alreadyExistingUserWithThatEmail); -> getting this thing null means that we don't have such document with this email and entollment!
@@ -35,27 +35,12 @@ const registerUser = async (req, res) => {
   }
 
   // Ok, now if that user is not registered with us.
-  // then check for the "enrollment" to verify if that user is a part of MAIT_B.TECH or not.
-  // So, kind of verify the studentData
-  const studentData = await Student.findOne({
-    $and: [{ enrollment }, { studentName: name.toUpperCase() }],
-  });
+  // then check for the "email" validity from verifalia.
 
-  if (!studentData) {
-    return res.status(400).json({
-      error:
-        "Sorry! Your name and/or enrollment is not yet registered in our MAIT_B.Tech_student's_database. Contact developers!",
-    });
-  }
 
   // Now, we are sure that the student is registered in MAIT_B.Tech_student's_database.
   // Start registering the user now!
 
-  // check if the user is admin
-  let isAdmin = false;
-  if (studentData.enrollment.slice(0, 6) == "admin_") {
-    isAdmin = true;
-  }
 
   // get the avatar local path.
   const avatarLocalPath = req.file?.path;
@@ -79,8 +64,6 @@ const registerUser = async (req, res) => {
     avatarUrl: avatarURL.url,
     email,
     password,
-    enrollment,
-    isAdmin,
   });
 
   if (!documentedUser) {
