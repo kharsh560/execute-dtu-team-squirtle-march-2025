@@ -12,7 +12,6 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
 
-# Changed port from 3000 to 5500 to avoid permission issues
 httpd = HTTPServer(('localhost', 5500), CORSRequestHandler)
 print("Serving frontend at http://localhost:5500")
 httpd.serve_forever()

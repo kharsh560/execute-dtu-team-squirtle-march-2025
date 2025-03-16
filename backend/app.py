@@ -8,7 +8,7 @@ from flask import json
 import os
 app = Flask(__name__)
 
-# Update CORS configuration to allow all origins including Vite's development server
+
 CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:3000", "http://localhost:3000", 
                                          "http://127.0.0.1:5500", "http://localhost:5500",
                                          "http://127.0.0.1:5173", "http://localhost:5173"]}},
@@ -36,7 +36,7 @@ def analyze():
     if not user_input:
         return jsonify({"error": "No query provided"}), 400
     
-    # Check if the input is a URL
+
     if any(kwd in user_input for kwd in ["http", "www", "https", "://"]):
         target = asyncio.run(create_crawler(user_input))[user_input]
         print("Target content: ", target)
@@ -46,7 +46,7 @@ def analyze():
         target = query
         
     print("Generated Query:", query)
-    urls = search_urls(query)  # Perform a search to get relevant URLs
+    urls = search_urls(query) 
 
     scraped_content = {}
     for url in urls[:4]:
@@ -66,7 +66,7 @@ def analyze():
 
 @app.route("/analyze-image", methods=["POST", "OPTIONS"])
 def analyze_image():
-    # Handle preflight OPTIONS request
+
     if request.method == "OPTIONS":
         return "", 200
         
@@ -77,21 +77,21 @@ def analyze_image():
     
     image_file = request.files['image']
     
-    # Read the image data
+
     image_data = image_file.read()
     
     try:
-        # Analyze the image to get a description and search query
+
         image_analysis = model.analyze_image(image_data)
         print("Image Analysis:", image_analysis)
         
-        # Use the generated search query to find relevant URLs
+
         search_query = image_analysis["search_query"]
         print("Generated Search Query:", search_query)
         
         urls = search_urls(search_query)
         
-        # Scrape content from the URLs
+
         scraped_content = {}
         for url in urls[:4]:
             content = asyncio.run(create_crawler(url))
@@ -99,19 +99,17 @@ def analyze_image():
         
         print("DONE SCRAPING\n")
         
-        # Combine the scraped content
+
         combined_content = "\n".join(scraped_content.values())
         combined_content += f"\n\n\nThese are the url's which were used to analyse: {urls}"
-        
-        # Fact-check the image using the scraped content
+
         fact_check_result_raw = model.fact_check_image(image_analysis, combined_content)
         print("DONE FACT-CHECKING\n")
         
-        # Clean the response
+
         fact_check_result = clean_response(fact_check_result_raw)
         print(fact_check_result)
-        
-        # Add the image analysis to the result
+
         fact_check_result["image_analysis"] = image_analysis["description"]
         
         return jsonify(fact_check_result)

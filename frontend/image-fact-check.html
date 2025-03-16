@@ -114,7 +114,7 @@
         <div id="sources"></div>
     </div>
 
-    <!-- Keep existing code until the script section -->
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -129,12 +129,12 @@
             const conclusion = document.getElementById('conclusion');
             const sources = document.getElementById('sources');
             
-            // Handle click on upload area
+   
             uploadArea.addEventListener('click', function() {
                 imageInput.click();
             });
             
-            // Handle drag and drop
+
             uploadArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 uploadArea.style.borderColor = '#45a049';
@@ -153,14 +153,14 @@
                 }
             });
             
-            // Handle file selection
+   
             imageInput.addEventListener('change', function() {
                 if (imageInput.files.length > 0) {
                     handleImageFile(imageInput.files[0]);
                 }
             });
             
-            // Process the selected image file
+
             function handleImageFile(file) {
                 if (!file.type.match('image.*')) {
                     alert('Please select an image file');
@@ -173,18 +173,18 @@
                     imagePreview.style.display = 'block';
                     analyzeBtn.disabled = false;
                     
-                    // Reset results
+
                     resultContainer.style.display = 'none';
                 };
                 reader.readAsDataURL(file);
             }
             
-            // Handle analyze button click
+
             analyzeBtn.addEventListener('click', function() {
                 analyzeImage();
             });
             
-            // Send image to backend for analysis
+
             function analyzeImage() {
                 const file = imageInput.files[0];
                 if (!file) return;
@@ -192,19 +192,18 @@
                 const formData = new FormData();
                 formData.append('image', file);
                 
-                // Show loader
+      
                 loader.style.display = 'block';
                 analyzeBtn.disabled = true;
                 resultContainer.style.display = 'none';
                 
-                // Updated to use the correct port (5173 is your Vite dev server port)
+    
                 fetch('http://localhost:5000/analyze-image', {
                     method: 'POST',
                     body: formData,
-                    // No need to set Content-Type header for FormData
-                    // It will be set automatically with the correct boundary
-                    mode: 'cors', // Explicitly set CORS mode
-                    credentials: 'omit' // Changed from 'same-origin' to 'omit'
+     
+                    mode: 'cors',
+                    credentials: 'omit'
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -213,11 +212,11 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Hide loader
+         
                     loader.style.display = 'none';
                     analyzeBtn.disabled = false;
                     
-                    // Display results
+     
                     displayResults(data);
                 })
                 .catch(error => {
@@ -228,14 +227,14 @@
                 });
             }
             
-            // Display analysis results
+  
             function displayResults(data) {
                 resultContainer.style.display = 'block';
                 
-                // Display image description
+       
                 imageDescription.innerHTML = `<p><strong>Image Analysis:</strong> ${data.image_analysis || 'Not available'}</p>`;
                 
-                // Display trust score
+      
                 const score = parseFloat(data.t_score) || 0;
                 let scoreClass = 'uncertain';
                 if (data.bool === true) {
@@ -247,13 +246,13 @@
                 trustScore.innerHTML = `Trust Score: ${(score * 100).toFixed(1)}%`;
                 trustScore.className = `trust-score ${scoreClass}`;
                 
-                // Display conclusion
+           
                 conclusion.innerHTML = `<p>${data.concl || 'No conclusion available'}</p>`;
                 
-                // Display sources as clickable links
+         
                 sources.innerHTML = '';
                 
-                // Add sources as clickable links
+      
                 if (data.source && Array.isArray(data.source)) {
                     const sourceList = document.createElement('ul');
                     data.source.forEach(url => {
@@ -262,7 +261,7 @@
                             const link = document.createElement('a');
                             link.href = url;
                             link.textContent = url;
-                            link.target = '_blank'; // Open in new tab
+                            link.target = '_blank'; 
                             listItem.appendChild(link);
                             sourceList.appendChild(listItem);
                         }

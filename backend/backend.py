@@ -18,14 +18,14 @@ class AIMODEL:
             "response_mime_type": "text/plain",
         }
 
-        # Use gemini-1.5-flash for both text and image processing
+
         self.model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
             generation_config=self.generation_config,
         )
         
-        # Use the same model for vision tasks
-        self.vision_model = self.model  # Use the same model instance for vision tasks
+
+        self.vision_model = self.model  
 
     def generate_search_queries(self, target):
         chat_session = self.model.start_chat(
@@ -43,30 +43,27 @@ class AIMODEL:
     
     def analyze_image(self, image_data):
         try:
-            # Convert binary image data to base64
+      
             encoded_image = base64.b64encode(image_data).decode('utf-8')
             
-            # Create the image part for the model
+
             image_part = {
-                "inline_data": {  # Changed from mime_type/data to inline_data format
+                "inline_data": { 
                     "mime_type": "image/jpeg",
                     "data": encoded_image
                 }
             }
             
-            # Create a prompt for the vision model
+
             prompt = "Analyze this image and describe what you see. Identify the main claim or subject matter that would be important to fact-check."
-            
-            # Send the image to the model
+
             response = self.vision_model.generate_content([
                 prompt,
                 image_part
             ])
-            
-            # Extract the description
+
             image_description = response.text
-            
-            # Generate a search query based on the description
+
             query_prompt = f"Based on this image description: '{image_description}', generate a concise search query (5-10 words) that would help fact-check the main claim or subject in the image."
             query_response = self.model.generate_content(query_prompt)
             search_query = query_response.text
@@ -96,7 +93,7 @@ class AIMODEL:
     
     def fact_check_image(self, image_analysis, scraped_content):
         try:
-            # Create a prompt for fact-checking
+
             prompt = f"""
             I need to fact-check an image. Here's what the image shows:
             
@@ -122,7 +119,7 @@ class AIMODEL:
             }}
             """
             
-            # Send the prompt to the model
+
             response = self.model.generate_content(prompt)
             
             return response.text
