@@ -1,13 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fact Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .options {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+        }
+        .option-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            width: 45%;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .option-card h2 {
+            margin-top: 0;
+        }
+        .option-card p {
+            color: #666;
+        }
+        .option-card a {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .option-card a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fact Checker</h1>
+    
+    <div class="options">
+        <div class="option-card">
+            <h2>Text Fact Checker</h2>
+            <p>Check the accuracy of text claims, statements, or URLs</p>
+            <a href="text-fact-check.html">Check Text</a>
+        </div>
+        
+        <div class="option-card">
+            <h2>Image Fact Checker</h2>
+            <p>Verify the accuracy of claims made in images</p>
+            <a href="image-fact-check.html">Check Image</a>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <p>Our fact-checking tool uses advanced AI to analyze content and provide trustworthiness scores.</p>
+    </div>
+</body>
 </html>
