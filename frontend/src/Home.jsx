@@ -1,41 +1,50 @@
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+// import { useState } from 'react'
+// import { useSelector } from 'react-redux'
 
-function App() {
-  const userName = useSelector(state => state.userData.user);
+// function App() {
+//   const [counter, setCounter]  = useState(15)
 
-  const [message, setMessage] = useState("");
-  const [healthCheck, setHealthCheck] = useState(false);
+//   const addValue = () => {
+//     // setCounter(prevCounter => prevCounter + 1);
+//     // console.log(counter); 
+//     // Stale value issue because of JS's Closure!!! In simple terms
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:5600/api/v1/healthcheck");
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        setHealthCheck(true);
-        const data = await response.json();
-        setMessage(data.message || JSON.stringify(data)); // Update state with response
-      } catch (error) {
-        console.error("Error fetching health check:", error);
-        setMessage("Failed to fetch health check");
-      }
-    };
+//     setCounter(prevCounter => prevCounter + 1)
+//     setCounter(prevCounter => prevCounter + 1)
+//     setCounter(prevCounter => prevCounter + 1)
+//     setCounter(prevCounter => prevCounter + 1)
+//     console.log(counter);
+//   }
+//   const subtractValue = () => {
+//     setCounter(prevCounter => prevCounter - 1);
+//     console.log(counter);
+//   }
 
-    fetchData();
-  }, []);
+//   const userName = useSelector(state => state.userData.user);
 
-  return (
-    <>
-    <div className=' flex flex-col items-center'>
-      <h1>Hello {userName}</h1>
-      <h1 className=' text-3xl font-bold'>{message}</h1>
-      {healthCheck ? (<h1>So, the <span className=' text-red-600'>CORS origin</span> error is <span className=' text-green-600'>resolved</span>. This app's frontend has been set to run on port <span className='text-amber-400'>3000</span>.</h1>) : ""}
-      
-    </div>
-    </>
-  )
-}
+//   return (
+//     <>
+//     <div className=' flex flex-col items-center'>
+//       <h1>Hi {userName}! You are welcomed to MachineCoding's home page.</h1>
+//       <h1>If you want to change the username, head towards "user" in the navbar!</h1>
+//       <h1>Exploring the concept of closures in react that's affecting useEffect and useState!</h1>
+//       <h2>Counter value: {counter}</h2>
+//       <div className=' flex gap-2 p-3'>
+//         <button className=' bg-amber-600 active:bg-amber-800 active:scale-90 rounded-xl p-1 cursor-pointer' onClick={addValue}> Add value {counter}</button> 
+//         <button className=' bg-amber-600 active:bg-amber-800 active:scale-90 rounded-xl p-1 cursor-pointer' onClick={subtractValue}>subtract value {counter}</button>
+//       </div>
+//     </div>
 
-export default App
+//     {/* <div className='p-2'>
+//       <h2>Pages: </h2>
+//       <div className='mt-2 flex gap-2'>
+//         <button className=' bg-amber-600 active:bg-amber-800 active:scale-90 rounded-xl p-1 cursor-pointer' > WorkSpace1 </button> 
+//         <button className=' bg-amber-600 active:bg-amber-800 active:scale-90 rounded-xl p-1 cursor-pointer' > WorkSpace2 </button>
+//         <button className=' bg-amber-600 active:bg-amber-800 active:scale-90 rounded-xl p-1 cursor-pointer' > WorkSpace3 </button>
+//       </div>
+//     </div> */}
+//     </>
+//   )
+// }
+
+// // export default App
