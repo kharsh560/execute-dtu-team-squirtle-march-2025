@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Fact Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .upload-container {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-container:hover {
+            border-color: #aaa;
+        }
+        #image-preview {
+            max-width: 100%;
+            max-height: 400px;
+            margin: 20px auto;
+            display: none;
+        }
+        #result-container {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: none;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .trust-score {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .true {
+            color: green;
+        }
+        .false {
+            color: red;
+        }
+        .uncertain {
+            color: orange;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Fact Checker</h1>
+    
+    <div class="upload-container" id="upload-area">
+        <p>Click to upload an image or drag and drop</p>
+        <input type="file" id="image-input" accept="image/*" style="display: none;">
+    </div>
+    
+    <img id="image-preview" alt="Image preview">
+    
+    <div style="text-align: center;">
+        <button id="analyze-btn" disabled>Analyze Image</button>
+    </div>
+    
+    <div class="loader" id="loader"></div>
+    
+    <div id="result-container">
+        <h2>Analysis Results</h2>
+        <div id="image-description"></div>
+        <div class="trust-score" id="trust-score"></div>
+        <h3>Conclusion</h3>
+        <div id="conclusion"></div>
+        <h3>Sources</h3>
+        <div id="sources"></div>
+    </div>
+
+    <!-- Keep existing code until the script section -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('upload-area');
+            const imageInput = document.getElementById('image-input');
+            const imagePreview = document.getElementById('image-preview');
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const loader = document.getElementById('loader');
+            const resultContainer = document.getElementById('result-container');
+            const imageDescription = document.getElementById('image-description');
+            const trustScore = document.getElementById('trust-score');
+            const conclusion = document.getElementById('conclusion');
+            const sources = document.getElementById('sources');
+            
+            // Handle click on upload area
+            uploadArea.addEventListener('click', function() {
+                imageInput.click();
+            });
+            
+            // Handle drag and drop
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#45a049';
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.style.borderColor = '#ccc';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ccc';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleImageFile(e.dataTransfer.files[0]);
+                }
+            });
+            
+            // Handle file selection
+            imageInput.addEventListener('change', function() {
+                if (imageInput.files.length > 0) {
+                    handleImageFile(imageInput.files[0]);
+                }
+            });
+            
+            // Process the selected image file
+            function handleImageFile(file) {
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    analyzeBtn.disabled = false;
+                    
+                    // Reset results
+                    resultContainer.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            // Handle analyze button click
+            analyzeBtn.addEventListener('click', function() {
+                analyzeImage();
+            });
+            
+            // Send image to backend for analysis
+            function analyzeImage() {
+                const file = imageInput.files[0];
+                if (!file) return;
+                
+                const formData = new FormData();
+                formData.append('image', file);
+                
+                // Show loader
+                loader.style.display = 'block';
+                analyzeBtn.disabled = true;
+                resultContainer.style.display = 'none';
+                
+                // Updated to use the correct port (5173 is your Vite dev server port)
+                fetch('http://localhost:5000/analyze-image', {
+                    method: 'POST',
+                    body: formData,
+                    // No need to set Content-Type header for FormData
+                    // It will be set automatically with the correct boundary
+                    mode: 'cors', // Explicitly set CORS mode
+                    credentials: 'omit' // Changed from 'same-origin' to 'omit'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Hide loader
+                    loader.style.display = 'none';
+                    analyzeBtn.disabled = false;
+                    
+                    // Display results
+                    displayResults(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    loader.style.display = 'none';
+                    analyzeBtn.disabled = false;
+                    alert('An error occurred during analysis. Please try again.');
+                });
+            }
+            
+            // Display analysis results
+            function displayResults(data) {
+                resultContainer.style.display = 'block';
+                
+                // Display image description
+                imageDescription.innerHTML = `<p><strong>Image Analysis:</strong> ${data.image_analysis || 'Not available'}</p>`;
+                
+                // Display trust score
+                const score = parseFloat(data.t_score) || 0;
+                let scoreClass = 'uncertain';
+                if (data.bool === true) {
+                    scoreClass = 'true';
+                } else if (data.bool === false) {
+                    scoreClass = 'false';
+                }
+                
+                trustScore.innerHTML = `Trust Score: ${(score * 100).toFixed(1)}%`;
+                trustScore.className = `trust-score ${scoreClass}`;
+                
+                // Display conclusion
+                conclusion.innerHTML = `<p>${data.concl || 'No conclusion available'}</p>`;
+                
+                // Display sources as clickable links
+                sources.innerHTML = '';
+                
+                // Add sources as clickable links
+                if (data.source && Array.isArray(data.source)) {
+                    const sourceList = document.createElement('ul');
+                    data.source.forEach(url => {
+                        if (url) {
+                            const listItem = document.createElement('li');
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.textContent = url;
+                            link.target = '_blank'; // Open in new tab
+                            listItem.appendChild(link);
+                            sourceList.appendChild(listItem);
+                        }
+                    });
+                    sources.appendChild(sourceList);
+                } else {
+                    sources.textContent = 'No sources available';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
