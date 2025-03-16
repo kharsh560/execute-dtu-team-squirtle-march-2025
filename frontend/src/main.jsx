@@ -6,7 +6,7 @@ import LandingPage from './pages/Body/LandingPage';
 import './index.css';
 import { Provider } from 'react-redux';
 import { store } from './appStore/store/store.js'
-import User from './pages/user/User.jsx';
+import User from './pages/user/SignIn.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
