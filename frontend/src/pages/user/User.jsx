@@ -5,6 +5,7 @@ import { login } from '../../appStore/storeFeatures/userSlice';
 
 
 function User() {
+    const darkMode = useSelector((state) => state.themeSlice.darkMode);
     const {userId} = useParams();
     const dispatch = useDispatch();
     const userName = useSelector(state => state.userData.user);
@@ -22,7 +23,8 @@ function User() {
 
   return (
     <div>
-        <div className=' flex flex-col items-center'>
+        {/* ${darkMode ? 'bg-gray-900/80 text-white' : 'bg-white/80'} */}
+        <div className={` p-4 `}>
             <div>Welcome {userName}. Hope you are having a great day!</div>
             <form className=' flex flex-col w-fit items-center'>
                 <label>Change the Username if you want.</label>

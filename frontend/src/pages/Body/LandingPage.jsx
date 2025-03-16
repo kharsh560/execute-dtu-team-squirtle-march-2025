@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Shield, Brain, Users, Check, X, Github, Twitter, Mail, ShieldCheck, Sun, Moon } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import Header from '../header/Header';
+import { useSelector } from 'react-redux';
 
 const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -55,11 +56,12 @@ const fadeIn = {
     }
   ];
   
-  function LandingPage({ darkMode }) {
+  function LandingPage() {
+    const darkMode = useSelector((state) => state.themeSlice.darkMode);
     return (
       <>
         {/* Hero Section */}
-        <section className="pt-32 pb-20 px-6">
+        <section className="pt-10 pb-20 px-6">
           <div className="container mx-auto text-center">
             <motion.div
               initial="hidden"
