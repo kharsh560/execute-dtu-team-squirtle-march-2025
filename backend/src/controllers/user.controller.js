@@ -1,4 +1,3 @@
-import { Student } from "../models/student.model.js";
 import { User } from "../models/user.model.js";
 import uploadOntoCloudinary from "../utils/cloudinary.config.js";
 
@@ -152,7 +151,7 @@ const signin = async (req, res) => {
   const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
     queriedUser
   );
-  // This custom function will save the refresh token in the user's DB. We just need to save the accesstoken in the cookie!
+  // NOTE: This custom function "generateAccessAndRefereshTokens" is updating the refresh token in the user's DB. We just need to save the accesstoken in the cookie!
   // Means jo bhi kaam "MongoDB" ka tha, wo ho gya! Means, queried user ke ander toh nahi, but DB ke iss user mei aa gya h refresh token.
 
   // In order to pass this data of "queriedUser" in response, we need to remove the password.
@@ -202,7 +201,7 @@ const signout = async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: false,
+    secure: true,
   };
 
   return res.status(200).clearCookie("accessToken", options).json({

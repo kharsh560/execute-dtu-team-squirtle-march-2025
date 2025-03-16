@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import connectDB from "./db/dbConnectionLogic.js";
 import app from "./app.js";
-// import { insertStudents } from "./models/student.model.js";
 
 dotenv.config({
     path: "./env"

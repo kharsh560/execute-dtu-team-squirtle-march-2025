@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    credits: {
+      type: Number,
+      default: 50,
+    },
     avatarUrl: {
       type: String,
       // required: true, // -> Its not mandatory! We'll provide a default avatar in case of no avatar.
