@@ -28,28 +28,28 @@ const DashboardHome = () => {
   // Sample data for stats
   const stats = [
     {
-      title: "Learning Hours",
+      title: "Time Spent",
       value: "2,847",
       icon: <Clock size={20} className="text-blue-500" />,
       change: "+5.2%",
       positive: true
     },
     {
-      title: "Assessments Taken",
+      title: "Facts Checked ",
       value: "1,238",
       icon: <FileText size={20} className="text-purple-500" />,
       change: "+8.2%",
       positive: true
     },
     {
-      title: "Modules Completed",
-      value: "456",
+      title: "XPs Earned",
+      value: "+206",
       icon: <CheckCircle size={20} className="text-green-500" />,
       change: "+5.7%",
       positive: true
     },
     {
-      title: "Certifications Earned",
+      title: "Public Contributions",
       value: "324",
       icon: <Shield size={20} className="text-orange-500" />,
       change: "+13%",
