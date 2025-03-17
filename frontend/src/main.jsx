@@ -17,6 +17,7 @@ import FactChecks from './pages/Dashboard/FactChecks.jsx'
 import XPWallet from './pages/Dashboard/XPWallet.jsx'
 import AIFactEngine from './pages/Dashboard/AIFactEngine.jsx'
 import FactHub from './pages/Dashboard/FactHub.jsx'
+import NotificationProvider from './utilities/NotificationProvider.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,8 +39,10 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
+    <NotificationProvider>
+      <StrictMode>
+        <RouterProvider router={router} />
+      </StrictMode>
+    </NotificationProvider>
   </Provider>
 )

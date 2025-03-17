@@ -236,7 +236,7 @@ const addCredits = async (req, res) => {
     }
 
     // Define the conversion rate (10 INR = 20 credits)
-    const creditsToAdd = (amount / 10) * 20.5;
+    const creditsToAdd = (amount / 10) * 20;
 
     // Find the user by email (from authenticated request)
     const user = await User.findOne({ email: req.user.email });
