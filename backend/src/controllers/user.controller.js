@@ -222,4 +222,46 @@ const sessionCheck = async (req, res) => {
     })
 };
 
-export { registerUser, signin, signout, sessionCheck };
+
+const addCredits = async (req, res) => {
+  try {
+    const { amount } = req.body;
+
+    if (!req.user || !req.user.email) {
+      return res.status(401).json({ error: "Unauthorized! Please log in." });
+    }
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount!" });
+    }
+
+    // Define the conversion rate (10 INR = 20 credits)
+    const creditsToAdd = (amount / 10) * 20.5;
+
+    // Find the user by email (from authenticated request)
+    const user = await User.findOne({ email: req.user.email });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+
+    const initialCredits = user.credits;
+
+    // Update user's credits
+    user.credits += creditsToAdd;
+    await user.save();
+
+    res.status(200).json({
+      message: "Credits added successfully!",
+      initialCredits: initialCredits,
+      totalCredits: user.credits,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
+  }
+};
+
+
+export { registerUser, signin, signout, sessionCheck, addCredits };
