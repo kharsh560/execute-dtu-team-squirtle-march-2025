@@ -225,7 +225,9 @@ const sessionCheck = async (req, res) => {
 
 const addCredits = async (req, res) => {
   try {
-    const { amount } = req.body;
+    const { amount } = req.body; // parseInt(req.body.amount, 10);
+    // console.log(amount);
+    
 
     if (!req.user || !req.user.email) {
       return res.status(401).json({ error: "Unauthorized! Please log in." });

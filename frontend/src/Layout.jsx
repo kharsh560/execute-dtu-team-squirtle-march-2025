@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Header from './pages/header/Header';
 import Footer from './pages/footer/Footer';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from './appStore/storeFeatures/authSlice';
+import { login, updateCredits } from './appStore/storeFeatures/authSlice';
 
 function Layout() {
   const darkMode = useSelector((state) => state.themeSlice.darkMode);
@@ -31,6 +31,7 @@ function Layout() {
            if (response.ok) {
              const jsonResponse = await response.json();
              dispatch(login(jsonResponse.user)); // Populate Redux store
+             dispatch(updateCredits(jsonResponse.user.credits));
            }
          } catch (error) {
            console.log("Failed to rehydrate session:", error);

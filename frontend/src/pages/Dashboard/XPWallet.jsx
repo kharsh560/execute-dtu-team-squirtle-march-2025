@@ -13,12 +13,15 @@ import {
   ArrowDownRight,
   Filter
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const XPWallet = () => {
   const darkMode = useSelector((state) => state.themeSlice.darkMode);
   const [activeTab, setActiveTab] = useState('overview');
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userData = useSelector((state) => state.auth.userData);
+  const navigate = useNavigate();
+  const userCredits = useSelector(state => state.auth.userCredits);
   
   // Sample data for XP transactions
   const transactions = [
@@ -68,7 +71,7 @@ const XPWallet = () => {
               <p className={`text-sm font-medium mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Current Balance</p>
               <div className="flex items-center">
                 <Zap size={28} className="text-orange-500 mr-2" />
-                <h2 className={`text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}> {userData?.credits} XP</h2>
+                <h2 className={`text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}> {userCredits} XP</h2>
               </div>
               <p className={`mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 You're in the top 15% of fact checkers!
@@ -84,13 +87,13 @@ const XPWallet = () => {
                 <Gift size={18} className="mr-2" />
                 Redeem Rewards
               </button>
-              <button className={`px-5 py-3 rounded-lg font-medium flex items-center justify-center ${
+              <button onClick={() => navigate("/sabpaisa")} className={`px-5 py-3 rounded-lg font-medium flex items-center justify-center cursor-pointer ${
                 darkMode 
                   ? 'bg-gray-700 hover:bg-gray-600 text-white' 
                   : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200'
               }`}>
                 <TrendingUp size={18} className="mr-2" />
-                Earn More XP
+                Buy More XP
               </button>
             </div>
           </div>
@@ -132,14 +135,14 @@ const XPWallet = () => {
         <div className={`px-8 py-4 ${darkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
           <div className="flex items-center justify-between mb-2">
             <p className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              Progress to Level 13
+              Progress to next Level!
             </p>
             <p className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              750/1000 XP
+              {userCredits}/10000 XP
             </p>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 h-2.5 rounded-full" style={{ width: '75%' }}></div>
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 h-2.5 rounded-full transition-all duration-1000" style={{ width: `${userCredits/10000 * 100}%` }}></div>
           </div>
         </div>
       </div>

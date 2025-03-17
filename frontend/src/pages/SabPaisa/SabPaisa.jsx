@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useNotification } from "../../utils/NotificationProvider";
+import { useNotification } from "../../utilities/NotificationProvider";
+import { updateCredits } from "../../appStore/storeFeatures/authSlice";
 
 const generateClientCode = () => {
   return Math.random().toString(36).substring(2, 7).toUpperCase();
@@ -20,6 +21,46 @@ const SabPaisaPayment = () => {
   const [status, setStatus] = useState(null);
   const [credits, setCredits] = useState((100 / 10) * 20.5); // Initial value
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+
+  const addCredits = async (amount) => {
+    try {
+        const response = await fetch("http://localhost:5600/api/v1/user/checkout", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include", // Ensures cookies (e.g., session tokens) are sent if using authentication
+        body: JSON.stringify({ amount }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+        throw new Error(data.error || "Failed to add credits");
+        }
+
+        if (data.message == "Credits added successfully!") {
+            setTimeout(() => {
+                setStatus("success");
+                setLoading(false);
+                showNotification("success", "Payment successful!");
+                setTimeout(() => {
+                    navigate("/dashboard/xp-wallet");
+                }, 1000); 
+            }, 2000); 
+            
+        }
+
+        console.log("Credits added successfully:", data);
+        dispatch(updateCredits(data.totalCredits));
+        return data;
+    } catch (error) {
+        console.error("Error adding credits:", error.message);
+        return error.message;
+    }
+};
 
   const handleAmountChange = (e) => {
     const newAmount = e.target.value;
@@ -29,17 +70,12 @@ const SabPaisaPayment = () => {
 
   const handlePayment = () => {
   if (!fullName.trim() || !amount || !email.trim() || !phone.trim()) {
-    // alert("Please fill in all fields before proceeding!");
     showNotification("error", "All fields are required!");
     return;
   }
 
   setLoading(true);
-  setTimeout(() => {
-    setLoading(false);
-    setStatus("success");
-    showNotification("success", "Payment successful!");
-  }, 2000); // Fake 2-sec load
+    addCredits(amount);
 };
 
 useEffect(() => {
@@ -54,7 +90,8 @@ useEffect(() => {
     )}
 
   return (
-    <div className="max-w-sm mx-auto p-6 bg-white dark:bg-gray-800 shadow-lg rounded-xl mt-2">
+    <div className=" w-full p-4 bg-gray-800">
+        <div className="max-w-sm mx-auto p-6 dark:bg-black shadow-lg rounded-xl">
         <div className=" flex justify-center mb-6">
             <img src="https://sabpaisa.in/wp-content/uploads/2023/06/header-logo.png" />
         </div>
@@ -134,15 +171,19 @@ useEffect(() => {
         {loading ? (
           <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-5 h-5"></span>
         ) : (
-          "Continue"
+          "Pay"
         )}
       </button>
 
       {status === "success" && (
-        <p className="mt-4 text-green-600 font-semibold text-center">
-          ✅ Payment Successful!
-        </p>
+        <div>
+            <p className="mt-4 text-green-600 font-semibold text-center">
+            ✅ Payment Successful! 
+            </p>
+            {/* <p className=" text-blue-600 text-xl font-semibold text-center">Redirecting you to XP-Wallet page!</p>  */}
+        </div>
       )}
+    </div>
     </div>
   );
 };

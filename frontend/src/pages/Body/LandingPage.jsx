@@ -137,8 +137,6 @@ function LandingPage() {
               Your trusted companion in the fight against fake news and misinformation.
               Get real-time fact-checking powered by advanced AI technology.
             </p>
-            // Find the hero section button and update it to navigate to the dashboard
-            // Around line 125-135 in the hero section
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/dashboard" className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">

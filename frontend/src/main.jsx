@@ -20,6 +20,7 @@ import FactHub from './pages/Dashboard/FactHub.jsx'
 import NotificationProvider from './utilities/NotificationProvider.jsx'
 import SignIn from './pages/authPages/SignIn.jsx'
 import SignUp from './pages/authPages/SignUp.jsx'
+import SabPaisaPayment from './pages/sabPaisa/SabPaisa.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
       </Route>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/sabpaisa" element={<SabPaisaPayment />} />
     </Route>
   )
 )

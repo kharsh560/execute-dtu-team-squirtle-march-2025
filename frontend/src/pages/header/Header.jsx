@@ -19,6 +19,7 @@ function Header() {
   const userData = useSelector((state) => state.auth.userData);
   const userName = userData?.name;
   const navigate = useNavigate();
+  const userCredits = useSelector(state => state.auth.userCredits);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -211,15 +212,15 @@ function Header() {
                    className="w-10 rounded-full mx-3 my-2"
                    alt="User avatar"
                  />
-                 <div className={`${
+                 <button onClick={() => navigate("/dashboard/xp-wallet")} className={`${
                      darkMode
                        ? "bg-gray-800/30 border-gray-700/40 text-white"
                        : "bg-gray-300 border-white/20 text-gray-900"
-                   } backdrop-blur-lg border rounded-xl shadow-lg p-1 flex`}>
+                   } cursor-pointer hover:scale-105 backdrop-blur-lg border rounded-xl shadow-lg p-1 flex`}>
                    <Coins size={32} color='#fff700'  />
                    {/* className={`${darkMode ? "" : " bg-yellow-700 rounded-full p-1"}`} */}
-                   <p className=' ml-1 text-xl font-bold'>{userData?.credits}</p>
-                 </div>
+                   <p className=' ml-1 text-xl font-bold'>{userCredits}</p>
+                 </button>
                </div>
               ) : (
                 <>
