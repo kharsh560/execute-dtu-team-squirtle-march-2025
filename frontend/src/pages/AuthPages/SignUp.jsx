@@ -2,7 +2,7 @@ import React, { useState } from 'react';
  import { BookOpen } from "lucide-react";
  import { Link, useNavigate } from 'react-router-dom';
  import { useSelector } from 'react-redux';
- import { useNotification } from '../../utils/NotificationProvider';
+ import { useNotification } from '../../utilities/NotificationProvider';
  
  function SignUp() {
      const darkMode = useSelector((state) => state.themeSlice.darkMode);
@@ -73,6 +73,10 @@ import React, { useState } from 'react';
          if(!jsonResponse) {
              console.log("Failed to convert response to JSON");
          }
+
+         if (jsonResponse?.message == "You are already registered. Go to sign in page and click forget password.") {
+                showNotification("error", "You are already registered. Go to sign in page and click forget password.");
+        }
  
          if (response.ok) {
              // alert("Sign up successful!");
@@ -98,7 +102,7 @@ import React, { useState } from 'react';
      setImage(e.target.files[0]);
    };
    return (
-     <div className="flex flex-col items-center justify-center min-h-screen mb-5 ">
+     <div className="flex flex-col items-center justify-center bg-gray-800 py-4 ">
        <div className={`mx-auto w-full max-w-lg rounded-xl p-10  shadow-lg border  ${darkMode ? 'bg-black border-gray-800 text-white ' : 'bg-white border-gray-200 '}`}>
          <h2 className="text-center text-3xl font-semibold ">
            Create your account!
@@ -107,7 +111,7 @@ import React, { useState } from 'react';
            Already have an account?&nbsp;
            <Link
              to="/signin"
-             className="font-medium text-blue-600 hover:underline"
+             className="font-medium text-orange-600 hover:underline"
            >
              Sign In
            </Link>
@@ -126,7 +130,7 @@ import React, { useState } from 'react';
                  type="email"
                  placeholder="Enter your email"
                  onChange={(e) => setEmail(e.target.value)}
-                 className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                 className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-orange-500 focus:ring focus:ring-orange-200"
                />
              </div>
              <div>
@@ -141,7 +145,7 @@ import React, { useState } from 'react';
                  type="Name"
                  placeholder="Enter complete name as per college records"
                  onChange={(e) => setName(e.target.value)}
-                 className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                 className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-orange-500 focus:ring focus:ring-orange-200"
                />
              </div>
              <div>
@@ -156,7 +160,7 @@ import React, { useState } from 'react';
                  type="password"
                  placeholder="Enter your password"
                  onChange={(e) => setPassword(e.target.value)}
-                 className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                 className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-orange-500 focus:ring focus:ring-orange-200"
                />
              </div>
              <div>
@@ -171,7 +175,7 @@ import React, { useState } from 'react';
                  type="password"
                  placeholder="Confirm your password"
                  onChange={(e) => setConfirmPassword(e.target.value)}
-                 className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                 className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm focus:border-orange-500 focus:ring focus:ring-orange-200"
                />
              </div>
              <div>
@@ -192,7 +196,7 @@ import React, { useState } from 'react';
                                  file:mr-4 file:py-2 file:px-4
                                  file:rounded-md file:border-0
                                  file:text-sm file:font-semibold
-                                 file:bg-indigo-100 file:text-indigo-700
+                                 file:bg-orange-100 file:text-orange-700
                                  hover:file:bg-indigo-200"
                  />
                </div>
@@ -200,7 +204,7 @@ import React, { useState } from 'react';
              <button
                type="submit"
                onClick={(e) => signUpHandler(e)}
-               className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-200"
+               className="w-full rounded-md bg-orange-600 px-4 py-2 text-white hover:bg-orange-700 focus:outline-none focus:ring focus:ring-orange-200"
              >
                Sign Up
              </button>
@@ -208,7 +212,7 @@ import React, { useState } from 'react';
                Don&apos;t want to sign up? &nbsp;
                <Link
                  to="/"
-                 className="font-medium text-blue-600 hover:underline"
+                 className="font-medium text-orange-600 hover:underline"
                >
                  Go back to Home
                </Link>

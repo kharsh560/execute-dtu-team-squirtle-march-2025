@@ -1,11 +1,44 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './pages/header/Header';
 import Footer from './pages/footer/Footer';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from './appStore/storeFeatures/authSlice';
 
 function Layout() {
   const darkMode = useSelector((state) => state.themeSlice.darkMode);
+  const dispatch = useDispatch();
+   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+ 
+   useEffect(() => {
+     const checkSession = async () => {
+       if (!isLoggedIn) {
+         try {
+           
+           const response = await fetch(
+             "http://localhost:5600/api/v1/user/checkSession",
+             {
+               method: "GET",
+               headers: {
+                 "Content-Type": "application/json",
+               },
+               credentials: "include", // Required for cookies in cross-origin requests
+             }
+           );
+           console.log("Checking for session!");
+           // const jsonResponse2 = await response.json();
+           // console.log(jsonResponse2);
+           if (response.ok) {
+             const jsonResponse = await response.json();
+             dispatch(login(jsonResponse.user)); // Populate Redux store
+           }
+         } catch (error) {
+           console.log("Failed to rehydrate session:", error);
+         }
+       }
+     };
+     checkSession();
+   }, [isLoggedIn, dispatch]);
   return (
     <div className={`flex flex-col min-h-screen transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
         <Header />

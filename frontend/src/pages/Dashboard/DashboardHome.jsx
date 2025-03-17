@@ -22,6 +22,8 @@ import {
 
 const DashboardHome = () => {
   const darkMode = useSelector((state) => state.themeSlice.darkMode);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+   const userData = useSelector((state) => state.auth.userData);
   
   // Sample data for stats
   const stats = [
@@ -96,7 +98,7 @@ const DashboardHome = () => {
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-2xl font-bold mb-2">Welcome back, Ashish K Choudhary!</h1>
+            <h1 className="text-2xl font-bold mb-2">Welcome back, {userData?.name}!</h1>
             <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Here's what's happening with your fact-checking activities.
             </p>

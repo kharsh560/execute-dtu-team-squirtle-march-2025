@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { switchTheme } from '../../appStore/storeFeatures/themeSlice';
-import { Sun, Moon, Menu, X, Shield, ChevronDown } from 'lucide-react';
+import { Sun, Moon, Menu, X, Shield, ChevronDown, Coins } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { logout } from '../../appStore/storeFeatures/authSlice';
+import { useNotification } from '../../utilities/NotificationProvider';
 
 function Header() {
+  const { showNotification } = useNotification();
   const darkMode = useSelector((state) => state.themeSlice.darkMode);
-  const userName = useSelector(state => state.userData.user);
   const dispatch = useDispatch();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userData = useSelector((state) => state.auth.userData);
+  const userName = userData?.name;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,6 +62,53 @@ function Header() {
     { name: 'Video Fact Check', path: '/video-fact-check' },
     { name: 'News Check', path: '/news-check' },
   ];
+
+  const signOut = async () => {
+     try {
+       const response = await fetch(
+         "http://localhost:5600/api/v1/user/signout",
+         {
+           method: "POST", // Assuming the sign-out is a POST request
+           headers: {
+             "Content-Type": "application/json",
+           },
+           credentials: "include", // Required for cookies in cross-origin requests
+           body: JSON.stringify({}), // Empty body if no additional data is needed
+         }
+       );
+ 
+       if (!response.ok) {
+         throw new Error("Signout failed");
+       }
+ 
+       const result = await response.json();
+       console.log("Signout successful", result);
+       dispatch(logout());
+       showNotification("success", "User logged Out successfully!");
+       // setIsLoggedIn(isLoggedInFromStore);
+       // setUserData(userDataFromStore);
+     } catch (error) {
+       console.error("Error during signout:", error);
+       showNotification("error", jsonResponse.error);
+     }
+   };
+
+  const authButtonHandler = async (buttonContent) => {
+     // console.log(buttonContent);
+     if (buttonContent === "Sign In") {
+       console.log("User wants to sign in");
+       navigate("/signin");
+     } else if (buttonContent === "Sign Out") {
+       console.log("User wants to sign out");
+       await signOut();
+       navigate("/");
+       // console.log("isLoggedIn: ", isLoggedIn);
+       // console.log("userData after dispatch(logout()): ", userData);
+       // The console.log("isLoggedIn: ", isLoggedIn) and console.log("userData after dispatch(logout()): ", userData) inside the
+       // authButtonHandler may still log the stale values of isLoggedIn and userData because
+       // React state updates (Redux in this case) are asynchronous.
+     }
+   };
 
   return (
     <header 
@@ -145,29 +198,51 @@ function Header() {
 
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center space-x-3">
-              {userName ? (
-                <Link
+              {isLoggedIn ? (
+                <div className=' flex items-center'>
+                  <Link
                   to="/dashboard"
                   className={`px-4 py-2 rounded-lg ${darkMode ? 'text-white' : 'text-gray-900'} font-medium`}
                 >
                   Dashboard
                 </Link>
+                 <img
+                   src={userData?.avatarUrl}
+                   className="w-10 rounded-full mx-3 my-2"
+                   alt="User avatar"
+                 />
+                 <div className={`${
+                     darkMode
+                       ? "bg-gray-800/30 border-gray-700/40 text-white"
+                       : "bg-gray-300 border-white/20 text-gray-900"
+                   } backdrop-blur-lg border rounded-xl shadow-lg p-1 flex`}>
+                   <Coins size={32} color='#fff700'  />
+                   {/* className={`${darkMode ? "" : " bg-yellow-700 rounded-full p-1"}`} */}
+                   <p className=' ml-1 text-xl font-bold'>{userData?.credits}</p>
+                 </div>
+               </div>
               ) : (
                 <>
-                  <Link
+                  {/* <Link
                     to="/signin"
                     className={`px-4 py-2 rounded-lg ${darkMode ? 'text-white' : 'text-gray-900'} font-medium`}
                   >
                     Sign In
-                  </Link>
-                  <Link
-                    to="/signup"
+                  </Link> */}
+                  {/* <Link
+                    to="/signin"
                     className="px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium hover:shadow-lg hover:shadow-orange-500/20 transition-all"
                   >
-                    Sign Up
-                  </Link>
+                    Sign In
+                  </Link> */}
                 </>
               )}
+              <button
+               onClick={(e) => authButtonHandler(e.target.textContent)}
+               className="bg-gradient-to-r from-orange-500 cursor-pointer to-orange-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+             >
+               {isLoggedIn ? "Sign Out" : "Sign In"}
+             </button>
             </div>
 
             {/* Mobile Menu Button */}

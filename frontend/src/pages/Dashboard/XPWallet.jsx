@@ -17,6 +17,8 @@ import {
 const XPWallet = () => {
   const darkMode = useSelector((state) => state.themeSlice.darkMode);
   const [activeTab, setActiveTab] = useState('overview');
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userData = useSelector((state) => state.auth.userData);
   
   // Sample data for XP transactions
   const transactions = [
@@ -66,7 +68,7 @@ const XPWallet = () => {
               <p className={`text-sm font-medium mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Current Balance</p>
               <div className="flex items-center">
                 <Zap size={28} className="text-orange-500 mr-2" />
-                <h2 className={`text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>1,250 XP</h2>
+                <h2 className={`text-4xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}> {userData?.credits} XP</h2>
               </div>
               <p className={`mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 You're in the top 15% of fact checkers!
