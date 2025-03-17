@@ -46,6 +46,7 @@ const SabPaisaPayment = () => {
                 setStatus("success");
                 setLoading(false);
                 showNotification("success", "Payment successful!");
+                dispatch(updateCredits(data.totalCredits));
                 setTimeout(() => {
                     navigate("/dashboard/xp-wallet");
                 }, 1000); 
@@ -54,7 +55,6 @@ const SabPaisaPayment = () => {
         }
 
         console.log("Credits added successfully:", data);
-        dispatch(updateCredits(data.totalCredits));
         return data;
     } catch (error) {
         console.error("Error adding credits:", error.message);
