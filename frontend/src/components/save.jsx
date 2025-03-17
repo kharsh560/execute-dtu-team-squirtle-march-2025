@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { switchTheme } from '../../appStore/storeFeatures/themeSlice';
+import { switchTheme } from '../appStore/storeFeatures/themeSlice';
 import { Sun, Moon, Menu, X, Shield, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
