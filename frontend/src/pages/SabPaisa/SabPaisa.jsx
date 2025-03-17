@@ -90,8 +90,8 @@ useEffect(() => {
     )}
 
   return (
-    <div className=" w-full p-4 bg-gray-800">
-        <div className="max-w-sm mx-auto p-6 dark:bg-black shadow-lg rounded-xl">
+    <div className=" w-full p-4 bg-gray-800 ">
+        <div className="max-w-sm mx-auto p-6 dark:bg-black shadow-lg rounded-xl border-2 border-solid border-amber-600">
         <div className=" flex justify-center mb-6">
             <img src="https://sabpaisa.in/wp-content/uploads/2023/06/header-logo.png" />
         </div>
@@ -166,7 +166,7 @@ useEffect(() => {
 
       <button
         onClick={handlePayment}
-        className="w-full bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition flex justify-center items-center"
+        className="w-full bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 cursor-pointer active:scale-90 transition flex justify-center items-center"
       >
         {loading ? (
           <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-5 h-5"></span>

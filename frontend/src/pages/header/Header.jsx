@@ -52,16 +52,23 @@ function Header() {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Services', path: '#', dropdown: true },
-    { name: 'How It Works', path: '/#how-it-works' },
-    { name: 'Pricing', path: '/#pricing' },
-    { name: 'About Us', path: '/about' },
+    { name: 'How It Works', path: '#' },
+    // /#how-it-works
+    { name: 'Pricing', path: '#' },
+    // /#pricing
+    { name: 'About Us', path: '#' },
+    // /about
   ];
 
   const serviceLinks = [
-    { name: 'Twitter Check', path: '/twitter-check' },
-    { name: 'Message Check', path: '/message-check' },
-    { name: 'Video Fact Check', path: '/video-fact-check' },
-    { name: 'News Check', path: '/news-check' },
+    { name: 'Twitter Check', path: '#' },
+    // /twitter-check
+    { name: 'Message Check', path: '#' },
+    // /message-check
+    { name: 'Video Fact Check', path: '#' },
+    // /video-fact-check
+    { name: 'News Check', path: '#' },
+    // /news-check
   ];
 
   const signOut = async () => {
