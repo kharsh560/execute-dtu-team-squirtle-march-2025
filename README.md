@@ -22,8 +22,10 @@ S2) run "npm i"
 
 S3) run "npm run dev"
 
+<hr>
+<hr>
 
-## Clone a GitHub Repository in VS Code using terminal:-
+## To clone this Repo using terminal, follow these steps:-
 
 Follow these steps to clone a GitHub repository using the terminal in VS Code.
 
