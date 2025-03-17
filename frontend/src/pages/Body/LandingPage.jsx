@@ -113,6 +113,8 @@ const pricingPlans = [
 
 function LandingPage() {
   const darkMode = useSelector((state) => state.themeSlice.darkMode);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   
   return (
     <>
@@ -139,9 +141,14 @@ function LandingPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/dashboard" className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+              {isLoggedIn ? 
+              (<Link to="/dashboard" className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
                 Start Fact Checking
-              </Link>
+              </Link>) : 
+              (<Link to="/signin" className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+                Start Fact Checking
+              </Link>)}
+              
               <button className={`px-6 py-3 rounded-lg font-medium ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-white text-gray-800 hover:bg-gray-100'} shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5`}>
                 Learn More
               </button>
